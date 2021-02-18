@@ -1,2 +1,2 @@
 # Michelin-Backend
-Spring Boot sandbox as Backend for TAKITATE 
+Sandbox for Spring Boot with Kotlin.
