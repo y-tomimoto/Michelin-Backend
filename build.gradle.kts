@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+  implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
+
 }
 
 tasks.withType<KotlinCompile> {
