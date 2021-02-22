@@ -1,5 +1,18 @@
 version: '3'
 services:
+  boot-mysql:
+    image: mysql:5.7
+    container_name: boot-mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/sql:/docker-entrypoint-initdb.d
+      - ./mysql/settings:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: bootdb
+      MYSQL_USER: boot
+      MYSQL_PASSWORD: boot
+      MYSQL_ROOT_PASSWORD: root
+
   app:
     build: .
     container_name: app
@@ -9,4 +22,11 @@ services:
       - .:/work
     # localを汚さず build ~ bootrun を実行したい
     tty: true
+    # mysqlコンテナ起動後にcentosコンテナを作成するよう設定
+    depends_on:
+      - boot-mysql
+    environment:
+      # https://stackoverflow.com/questions/58880998/communications-link-failure-spring-boot-mysql-docker-hibernate
+      SPRING_DATASOURCE_URL: jdbc:mysql://boot-mysql:3306/bootdb?autoReconnect=true&useSSL=false
+
 
