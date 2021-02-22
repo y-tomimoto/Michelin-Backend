@@ -1,0 +1,34 @@
+CREATE TABLE IF NOT EXISTS reviewers (
+    reviewer_id VARCHAR(256) PRIMARY KEY,
+    birthday DATE NOT NULL,
+    gender CHAR(1),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS reviews (
+    review_id VARCHAR(256) PRIMARY KEY,
+    reviewer_id VARCHAR(256),
+    restaurant_id VARCHAR(256),
+    title VARCHAR(20),
+    comment VARCHAR(256),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reviewer_id FOREIGN KEY (reviewer_id) REFERENCES reviewers (reviewer_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+) DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS review_tags (
+    UNIQUE (review_id, tag),
+    review_id VARCHAR(256) NOT NULL,
+    tag VARCHAR(256) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_review_id_on_review_tags FOREIGN KEY (review_id) REFERENCES reviews (review_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+) DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS review_likes (
+    UNIQUE (review_id, do_like_reviewer_id),
+    review_id VARCHAR(256) NOT NULL,
+    do_like_reviewer_id VARCHAR(256) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_review_id_on_review_likes FOREIGN KEY (review_id) REFERENCES reviews (review_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+) DEFAULT CHARSET = utf8;
